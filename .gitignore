@@ -1,0 +1,13 @@
+.venv
+.idea
+.env
+data
+media
+dockerfile
+**.yml
+nginx.conf
+**.pyc
+**.sqlite3
+
+**/migrations/**.py
+*/migrations/*.pyc

@@ -3,6 +3,7 @@ from rest_framework import serializers
 from apps.news.models import New
 from apps.photo.models import Photo
 from apps.photo.serializers.serializers import PhotoSerializer
+from apps.users.models import User
 
 
 class NewCreateSerializer(serializers.ModelSerializer):
@@ -13,6 +14,11 @@ class NewCreateSerializer(serializers.ModelSerializer):
         required=False,
         help_text="Выбрать существующую фотографию по ID"
     )
+    author = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        required=False,
+        allow_null=True,
+    )
 
     class Meta:
         model = New
@@ -22,8 +28,16 @@ class NewCreateSerializer(serializers.ModelSerializer):
         photo_upload = data.get('photo_upload')
         existing_photo = data.get('existing_photo')
 
-        if not photo_upload and not existing_photo:
-            raise serializers.ValidationError("Необходимо загрузить новую фотографию или выбрать существующую.")
+        request = self.context.get('request')
+
+        author = data.get('author', None)
+        user = request.user
+
+        if author is None:
+            author = user
+
+        # if not photo_upload and not existing_photo:
+        #     raise serializers.ValidationError("Необходимо загрузить новую фотографию или выбрать существующую.")
 
         if photo_upload and existing_photo:
             raise serializers.ValidationError(

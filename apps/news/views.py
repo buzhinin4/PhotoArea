@@ -26,6 +26,8 @@ class NewViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
     def create(self, request, *args, **kwargs):
+        if 'author' not in request.data.keys():
+            request.data['author'] = None
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -35,6 +37,8 @@ class NewViewSet(viewsets.ModelViewSet):
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):
+        if 'author' not in request.data.keys():
+            request.data['author'] = None
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial, context={'partial': partial})

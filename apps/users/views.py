@@ -186,3 +186,38 @@ class RegularUserViewSet(viewsets.ModelViewSet):
         request.data = register_data
         response = register_view(request=request, user_type=None)
         return response
+
+
+class UserDetailAPIView(generics.RetrieveUpdateAPIView):
+    queryset = get_user_model().objects.all()
+    permission_classes = (IsAuthenticated,)
+
+    def get_serializer_class(self):
+        user_type = self.get_user_type()
+        if user_type == 'photographer':
+            return PhotographerSerializer
+        elif user_type == 'studio':
+            return StudioSerializer
+        return RegularUserSerializer
+
+    def get_user_type(self):
+        user = self.request.user
+        if hasattr(user, 'studio_profile'):
+            return 'studio'
+        elif hasattr(user, 'photographer_profile'):
+            return 'photographer'
+        return 'regular'
+
+    def get_object(self):
+        user = self.request.user
+        if hasattr(user, 'studio_profile'):
+            return user.studio_profile
+        elif hasattr(user, 'photographer_profile'):
+            return user.photographer_profile
+        return user
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        data = serializer.data
+        return Response(data, status=status.HTTP_200_OK)

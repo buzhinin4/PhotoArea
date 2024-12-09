@@ -199,21 +199,26 @@ class StudioViewSet(viewsets.ModelViewSet):
     #     ],
     # )
     def create(self, request, *args, **kwargs):
+        data_format = request.content_type
         factory = APIRequestFactory()
         register_data = {
             **request.data,
             'user_type': 'studio'
         }
+        format_type = 'json' if request.content_type == 'application/json' else 'multipart'
         new_request = factory.post(
             request.path,
             data=register_data,
-            format='multipart'
+            format=format_type
         )
         register_view = RegisterView.as_view()
         response = register_view(new_request)
 
         if response.status_code == 201:
-            studio = Studio.objects.get(base_user__email=register_data.get('email')[0])
+            if format_type == 'json':
+                studio = Studio.objects.get(base_user__email=register_data.get('email'))
+            else:
+                studio = Studio.objects.get(base_user__email=register_data.get('email')[0])
             serializer = StudioSerializer(studio, context={'request': request})
             return Response(serializer.data, status=response.status_code)
         return response
@@ -252,20 +257,23 @@ class PhotographerViewSet(viewsets.ModelViewSet):
             **request.data,
             'user_type': 'photographer'
         }
+        format_type = 'json' if request.content_type == 'application/json' else 'multipart'
         new_request = factory.post(
             request.path,
             data=register_data,
-            format='multipart'
+            format=format_type
         )
         register_view = RegisterView.as_view()
         response = register_view(new_request)
 
         if response.status_code == 201:
-            photographer = Photographer.objects.get(base_user__email=register_data.get('email')[0])
-            serializer = PhotographerSerializer(photographer, context={'request': request})
+            if format_type == 'json':
+                studio = Studio.objects.get(base_user__email=register_data.get('email'))
+            else:
+                studio = Studio.objects.get(base_user__email=register_data.get('email')[0])
+            serializer = StudioSerializer(studio, context={'request': request})
             return Response(serializer.data, status=response.status_code)
         return response
-
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()

@@ -11,3 +11,4 @@ nginx.conf
 
 **/migrations/**.py
 */migrations/*.pyc
+/semproj.rar

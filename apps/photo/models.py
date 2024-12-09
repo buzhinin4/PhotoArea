@@ -14,7 +14,11 @@ def get_upload_path(instance, filename):
         return f'{base_dir}/News_Photo/user_photos/{username}/{title}/{filename}'
     if hasattr(instance, 'user_info'):
         username = instance.user_info['username']
-        return f'{base_dir}/News_Photo/user_photos/{username}/{filename}'
+        return f'{base_dir}/Avatars/user_photos/{username}/{filename}'
+    if hasattr(instance, 'portfolio_info'):
+        username = instance.portfolio_info['username']
+        portfolio_id = instance.portfolio_info['portfolio_id']
+        return f'{base_dir}/Portfolio_Photo/{username}/{portfolio_id}/{filename}'
     else:
         slug_title = slugify('c')
         return f'{base_dir}/new_photos/{slug_title}/{filename}'

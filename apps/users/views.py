@@ -20,6 +20,8 @@ from apps.users.serializers import (
     RegularUserSerializer,
 )
 from apps.users.services.services import AuthService
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.types import OpenApiTypes
 
 
 class ChangePasswordView(APIView):
@@ -95,6 +97,105 @@ class StudioViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    # @extend_schema(
+    #     operation_id="Create Studio",
+    #     description="Endpoint to create a new studio with optional photo upload.",
+    #     request={
+    #         "multipart/form-data": OpenApiTypes.OBJECT,
+    #         "application/json": OpenApiTypes.OBJECT,
+    #     },
+    #     parameters=[
+    #         OpenApiParameter(
+    #             name="email",
+    #             type=OpenApiTypes.STR,
+    #             description="Email of the studio",
+    #             required=True,
+    #         ),
+    #         OpenApiParameter(
+    #             name="phone_number",
+    #             type=OpenApiTypes.STR,
+    #             description="Phone number of the studio",
+    #             required=True,
+    #         ),
+    #         OpenApiParameter(
+    #             name="name",
+    #             type=OpenApiTypes.STR,
+    #             description="Name of the studio",
+    #             required=True,
+    #         ),
+    #         OpenApiParameter(
+    #             name="description",
+    #             type=OpenApiTypes.STR,
+    #             description="Description of the studio",
+    #             required=False,
+    #         ),
+    #         OpenApiParameter(
+    #             name="address.city",
+    #             type=OpenApiTypes.STR,
+    #             description="City of the studio",
+    #             required=True,
+    #         ),
+    #         OpenApiParameter(
+    #             name="address.street",
+    #             type=OpenApiTypes.STR,
+    #             description="Street of the studio",
+    #             required=True,
+    #         ),
+    #         OpenApiParameter(
+    #             name="address.building",
+    #             type=OpenApiTypes.STR,
+    #             description="Building of the studio",
+    #             required=True,
+    #         ),
+    #         OpenApiParameter(
+    #             name="address.office",
+    #             type=OpenApiTypes.STR,
+    #             description="Office of the studio",
+    #             required=False,
+    #         ),
+    #         OpenApiParameter(
+    #             name="photo_upload",
+    #             type=OpenApiTypes.BINARY,
+    #             description="Photo to upload",
+    #             required=False,
+    #         ),
+    #     ],
+    #     examples=[
+    #         OpenApiExample(
+    #             name="Example with photo upload",
+    #             value={
+    #                 "email": "Studio5@example.com",
+    #                 "phone_number": "+375333507228",
+    #                 "name": "Studio5",
+    #                 "description": "Studio5 description",
+    #                 "address": {
+    #                     "city": "Minsk",
+    #                     "street": "Lenina",
+    #                     "building": "10",
+    #                     "office": "5A"
+    #                 },
+    #                 "photo_upload": "binary file content here"
+    #             },
+    #             request_only=True,
+    #         ),
+    #         OpenApiExample(
+    #             name="Example without photo",
+    #             value={
+    #                 "email": "Studio5@example.com",
+    #                 "phone_number": "+375333507228",
+    #                 "name": "Studio5",
+    #                 "description": "Studio5 description",
+    #                 "address": {
+    #                     "city": "Minsk",
+    #                     "street": "Lenina",
+    #                     "building": "10",
+    #                     "office": "5A"
+    #                 }
+    #             },
+    #             request_only=True,
+    #         ),
+    #     ],
+    # )
     def create(self, request, *args, **kwargs):
         factory = APIRequestFactory()
         register_data = {

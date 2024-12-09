@@ -189,6 +189,7 @@ class StudioRegisterSerializer(BaseRegisterSerializer):
             photo.user_info = {'username': user.email}
             photo.save()
             user.photo = photo
+            user.photo = photo
         elif existing_photo:
             user.photo = existing_photo
 

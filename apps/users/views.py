@@ -93,6 +93,8 @@ class StudioViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['update', 'partial_update', 'destroy']:
             permission_classes = [IsOwner]
+        if self.action in ['create']:
+            permission_classes = [AllowAny]
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
@@ -205,13 +207,13 @@ class StudioViewSet(viewsets.ModelViewSet):
         new_request = factory.post(
             request.path,
             data=register_data,
-            format='json'
+            format='multipart'
         )
         register_view = RegisterView.as_view()
         response = register_view(new_request)
 
         if response.status_code == 201:
-            studio = Studio.objects.get(base_user__email=register_data.get('email'))
+            studio = Studio.objects.get(base_user__email=register_data.get('email')[0])
             serializer = StudioSerializer(studio, context={'request': request})
             return Response(serializer.data, status=response.status_code)
         return response
@@ -238,6 +240,8 @@ class PhotographerViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['update', 'partial_update', 'destroy']:
             permission_classes = [IsOwner]
+        if self.action in ['create']:
+            permission_classes = [AllowAny]
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
@@ -251,13 +255,13 @@ class PhotographerViewSet(viewsets.ModelViewSet):
         new_request = factory.post(
             request.path,
             data=register_data,
-            format='json'
+            format='multipart'
         )
         register_view = RegisterView.as_view()
         response = register_view(new_request)
 
         if response.status_code == 201:
-            photographer = Photographer.objects.get(base_user__email=register_data.get('email'))
+            photographer = Photographer.objects.get(base_user__email=register_data.get('email')[0])
             serializer = PhotographerSerializer(photographer, context={'request': request})
             return Response(serializer.data, status=response.status_code)
         return response

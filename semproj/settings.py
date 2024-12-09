@@ -270,8 +270,8 @@ SIMPLE_JWT = {
 # DRF SPECTACULAR
 ######################
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Kitchen Helper',
-    'DESCRIPTION': 'Kitchen Helper',
+    'TITLE': 'Photo Area',
+    'DESCRIPTION': 'Photo Area',
     'VERSION': '1.0.0',
 
     'SERVE_PERMISSIONS': [

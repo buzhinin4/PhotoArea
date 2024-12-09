@@ -9,6 +9,7 @@ urlpatterns = [
     path('news/', include('apps.news.urls', namespace='news')),
     path('schedule/', include('apps.schedule.urls', namespace='schedule')),
     path('order/', include('apps.order.urls', namespace='order')),
+    path('photos/', include('apps.photo.urls', namespace='photos')),
 ]
 
 urlpatterns += doc_urls

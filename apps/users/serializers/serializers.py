@@ -344,6 +344,7 @@ class StudioSerializer(serializers.ModelSerializer):
     address = serializers.SerializerMethodField()
     available_slots = serializers.SerializerMethodField()
     schedules = serializers.SerializerMethodField()
+    photo = serializers.SerializerMethodField()
 
     def get_rate(self, obj):
         comments = obj.base_user.comments.all()
@@ -413,6 +414,11 @@ class StudioSerializer(serializers.ModelSerializer):
 
         return dict(available_slots)
 
+    def get_photo(self, obj):
+        if obj.base_user.photo and obj.base_user.photo.image:
+            return obj.base_user.photo.pk
+        return None
+
     class Meta:
         model = Studio
         fields = '__all__'
@@ -425,6 +431,7 @@ class PhotographerSerializer(serializers.ModelSerializer):
     base_user_id = serializers.SerializerMethodField()
     available_slots = serializers.SerializerMethodField()
     schedules = serializers.SerializerMethodField()
+    photo = serializers.SerializerMethodField()
 
     def get_rate(self, obj):
         comments = obj.base_user.comments.all()
@@ -487,6 +494,11 @@ class PhotographerSerializer(serializers.ModelSerializer):
 
         return dict(available_slots)
 
+    def get_photo(self, obj):
+        if obj.base_user.photo and obj.base_user.photo.image:
+            return obj.base_user.photo.pk
+        return None
+
     class Meta:
         model = Photographer
         fields = '__all__'
@@ -495,4 +507,4 @@ class PhotographerSerializer(serializers.ModelSerializer):
 class RegularUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ('id', 'last_name', 'first_name', 'email', 'phone_number')
+        fields = ('id', 'last_name', 'first_name', 'email', 'phone_number', 'photo')

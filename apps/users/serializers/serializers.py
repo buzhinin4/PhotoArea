@@ -346,6 +346,7 @@ class StudioSerializer(serializers.ModelSerializer):
     available_slots = serializers.SerializerMethodField()
     schedules = serializers.SerializerMethodField()
     photo = serializers.SerializerMethodField()
+    user_type = serializers.SerializerMethodField()
 
     def get_rate(self, obj):
         comments = obj.base_user.comments.all()
@@ -420,6 +421,9 @@ class StudioSerializer(serializers.ModelSerializer):
             return obj.base_user.photo.pk
         return None
 
+    def get_user_type(self, obj):
+        return 'studio'
+
     class Meta:
         model = Studio
         fields = '__all__'
@@ -433,6 +437,7 @@ class PhotographerSerializer(serializers.ModelSerializer):
     available_slots = serializers.SerializerMethodField()
     schedules = serializers.SerializerMethodField()
     photo = serializers.SerializerMethodField()
+    user_type = serializers.SerializerMethodField()
 
     def get_rate(self, obj):
         comments = obj.base_user.comments.all()
@@ -500,6 +505,9 @@ class PhotographerSerializer(serializers.ModelSerializer):
             return obj.base_user.photo.pk
         return None
 
+    def get_user_type(self, obj):
+        return 'studio'
+
     class Meta:
         model = Photographer
         fields = '__all__'
@@ -508,4 +516,4 @@ class PhotographerSerializer(serializers.ModelSerializer):
 class RegularUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ('id', 'last_name', 'first_name', 'email', 'phone_number', 'photo')
+        fields = ('id', 'last_name', 'first_name', 'email', 'phone_number', 'photo', 'user_type', 'is_staff')

@@ -268,10 +268,10 @@ class PhotographerViewSet(viewsets.ModelViewSet):
 
         if response.status_code == 201:
             if format_type == 'json':
-                studio = Studio.objects.get(base_user__email=register_data.get('email'))
+                studio = Photographer.objects.get(base_user__email=register_data.get('email'))
             else:
-                studio = Studio.objects.get(base_user__email=register_data.get('email')[0])
-            serializer = StudioSerializer(studio, context={'request': request})
+                studio = Photographer.objects.get(base_user__email=register_data.get('email')[0])
+            serializer = PhotographerSerializer(studio, context={'request': request})
             return Response(serializer.data, status=response.status_code)
         return response
     def update(self, request, *args, **kwargs):
